@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<body>
+<h2>Rotaro Motion Feed</h2>
+<pre id="out"></pre>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const out = document.getElementById('out');
+const socket = io();
+
+socket.on('gyro', data => {
+  out.textContent =
+    JSON.stringify(data, null, 2) + "\n\n" + out.textContent;
+});
+</script>
+</body>
+</html>

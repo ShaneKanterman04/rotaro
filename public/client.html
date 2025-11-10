@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<body>
+<button id="enable">Enable Motion</button>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const socket = io();
+const btn = document.getElementById('enable');
+
+btn.onclick = async () => {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      DeviceMotionEvent.requestPermission) {
+    const resp = await DeviceMotionEvent.requestPermission();
+    if (resp !== 'granted') { alert('Denied'); return; }
+  }
+
+  btn.disabled = true;
+
+  window.addEventListener('devicemotion', e => {
+    socket.emit('gyro', {
+      accX: e.acceleration?.x,
+      accY: e.acceleration?.y,
+      accZ: e.acceleration?.z,
+      rotA: e.rotationRate?.alpha,
+      rotB: e.rotationRate?.beta,
+      rotC: e.rotationRate?.gamma
+    });
+  });
+};
+</script>
+</body>
+</html>
